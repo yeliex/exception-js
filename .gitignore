@@ -1,0 +1,12 @@
+.DS_Store
+dist
+*.js
+*.d.ts
+!/index.js
+node_modules
+package-lock.json
+*.lock
+!yarn.lock
+*.log
+.vscode
+.idea
