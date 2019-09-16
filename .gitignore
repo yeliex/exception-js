@@ -1,6 +1,8 @@
 .DS_Store
 dist
 *.js
+*.map
+lib/
 *.d.ts
 !/index.js
 node_modules

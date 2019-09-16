@@ -4,7 +4,11 @@
   "description": "Javascript exception class with ts for both server-side and clients",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf lib",
+    "prebuild": "npm run clean",
+    "prepublishOnly": "npm run build",
+    "build": "tsc --build tsconfig.json",
+    "test": "mocha -r ts-node/register ./test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -21,7 +25,12 @@
   },
   "homepage": "https://github.com/yeliex/exception-js#readme",
   "devDependencies": {
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.5",
+    "@types/power-assert": "^1.5.0",
+    "mocha": "^6.2.0",
+    "power-assert": "^1.6.1",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
   "dependencies": {

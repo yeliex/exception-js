@@ -1,53 +1,70 @@
-import * as Status from 'http-status';
+import Status = require('http-status');
 
-interface ExceptionBaseProps {
+interface ExceptionBaseProps<T = any> {
     code?: number;
     subcode?: number;
+    meta?: T;
 }
 
-interface KV<T = any> {
-    [key: string]: any;
-}
-
-interface ExceptionDefination<T extends KV> extends ExceptionBaseProps {
+interface ExceptionDefination<T> extends ExceptionBaseProps<T> {
     message?: string;
     trace?: boolean;
-    extra?: keyof T;
 }
 
-type ExceptionExtra<T extends KV> = {
-    readonly [key in keyof T]: T[key];
-}
+export default class Exception<T extends string, U = any> extends Error {
+    readonly name: T;
+    readonly code: number;
+    readonly subcode: number;
 
-export default abstract class Exception<T extends string, U extends KV> extends Error implements ExceptionExtra<U> {
-    static define<T extends string, U extends KV>(name: T, define: ExceptionDefination<U> = {}) {
-        const { code = 500, subcode = 0, message: defaultMessage = Status[code] } = define;
+    readonly meta: U;
 
-        return class extends Exception {
-            constructor(message: string = defaultMessage, extra: ExceptionExtra<U> = {}) {
-                new.target.name = name;
-                super(message, {
-                    code: define.code,
-                    subcode,
-                    ...extra,
-                });
-                if (define.trace === false) {
-                    this.stack = null;
-                }
-            }
+    constructor(message?: string, meta?: U) {
+        super(message);
+        this.meta = meta;
+    }
 
-            get name() {
-                return name;
-            }
+    toJSON() {
+        return {
+            code: this.code,
+            subcode: this.subcode,
+            message: this.message,
+            meta: this.meta,
         };
     }
-
-    readonly name: T;
-
-    constructor(message: string, extra: ExceptionExtra<U & ExceptionBaseProps> = {}) {
-        super(message);
-        Object.keys(extra).forEach((key) => {
-            this[key] = extra[key];
-        });
-    }
 }
+
+export const define = <T extends string, U = any>(name: T, define: ExceptionDefination<U> = {}): typeof Exception => {
+    const { code = 500, subcode = 0, message: defaultMessage = (Status as any)[code], meta: defaultMeta } = define;
+
+    function CustomException(message: string = defaultMessage, meta: U = defaultMeta): typeof Exception {
+        const exception = Exception.call(this, message, meta);
+        exception.code = code;
+        exception.subcode = subcode;
+        exception.name = name;
+        return exception;
+    }
+
+    CustomException.prototype = Object.create(Exception.prototype, {
+        code: {
+            get(): number {
+                return code;
+            },
+            enumerable: true,
+            configurable: false,
+        },
+        subcode: {
+            get(): number {
+                return subcode;
+            },
+            enumerable: true,
+            configurable: false,
+        },
+    });
+
+    CustomException.prototype.constructor = CustomException;
+
+    CustomException.captureStackTrace = Exception.captureStackTrace;
+    CustomException.stackTraceLimit = Exception.stackTraceLimit;
+
+    return CustomException as any;
+};
