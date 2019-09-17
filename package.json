@@ -1,6 +1,6 @@
 {
   "name": "exception.js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Javascript exception class with ts for both server-side and clients",
   "main": "index.js",
   "scripts": {
