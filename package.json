@@ -10,6 +10,14 @@
     "build": "tsc --build tsconfig.json",
     "test": "mocha -r ts-node/register ./test/**/*.test.ts"
   },
+  "files": [
+    "lib",
+    "src",
+    "index.js",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yeliex/exception-js.git"
