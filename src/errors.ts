@@ -336,8 +336,3 @@ export const SiteIsFrozen = define<'SiteIsFrozen'>('SiteIsFrozen', {
 export const NetworkReadTimeoutError = define<'NetworkReadTimeoutError'>('NetworkReadTimeoutError', {
     code: 598,
 });
-
-const error = new NotFound('Test', {
-    userId: 123,
-});
-console.log(JSON.stringify(error))

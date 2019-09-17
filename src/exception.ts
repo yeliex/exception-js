@@ -11,57 +11,69 @@ interface ExceptionDefination<T> extends ExceptionBaseProps<T> {
     trace?: boolean;
 }
 
-export default class Exception<T extends string, U = any> extends Error {
+export default class Exception<T extends string = 'Exception', U = any> extends Error {
     readonly name: T;
     readonly code: number;
     readonly subcode: number;
 
     readonly meta: U;
 
-    constructor(message?: string, meta?: U) {
+    constructor(message: string = 'Unknown', meta?: U) {
         super(message);
         this.meta = meta;
+        this.code = 500;
+        this.subcode = 0;
+        this.name = 'Exception' as T;
+
+        Object.defineProperties(this, {
+            toJSON: {
+                value: Exception.prototype.toJSON,
+                enumerable: false,
+                writable: false,
+                configurable: false,
+            },
+        });
     }
 
     toJSON() {
         return {
             code: this.code,
             subcode: this.subcode,
-            message: this.message,
+            message: `${this.name}: ${this.message}`,
             meta: this.meta,
         };
     }
 }
 
-export const define = <T extends string, U = any>(name: T, define: ExceptionDefination<U> = {}): typeof Exception => {
+export const define = <T, U = any>(name: T, define: ExceptionDefination<U> = {}): typeof Exception => {
     const { code = 500, subcode = 0, message: defaultMessage = (Status as any)[code], meta: defaultMeta } = define;
 
-    function CustomException(message: string = defaultMessage, meta: U = defaultMeta): typeof Exception {
-        const exception = Exception.call(this, message, meta);
-        exception.code = code;
-        exception.subcode = subcode;
-        exception.name = name;
+    function CustomException(message: string = defaultMessage, meta: U = defaultMeta): Exception {
+        const exception = new Exception(message, meta);
+
+        Object.defineProperties(exception, {
+            code: {
+                get() {
+                    return code;
+                },
+                configurable: false
+            },
+            subcode: {
+                get() {
+                    return subcode;
+                },
+                configurable: false
+            },
+            name: {
+                get() {
+                    return name;
+                },
+                configurable: false
+            }
+        });
+
         return exception;
     }
-
-    CustomException.prototype = Object.create(Exception.prototype, {
-        code: {
-            get(): number {
-                return code;
-            },
-            enumerable: true,
-            configurable: false,
-        },
-        subcode: {
-            get(): number {
-                return subcode;
-            },
-            enumerable: true,
-            configurable: false,
-        },
-    });
-
-    CustomException.prototype.constructor = CustomException;
 
     CustomException.captureStackTrace = Exception.captureStackTrace;
     CustomException.stackTraceLimit = Exception.stackTraceLimit;
