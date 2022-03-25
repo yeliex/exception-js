@@ -11,11 +11,11 @@ interface ExceptionDefination<T> extends ExceptionBaseProps<T> {
 }
 
 export default class Exception<T extends string = 'Exception', U = any> extends Error {
-    readonly name: T;
-    readonly code: number;
-    readonly subcode: number;
+    name: T;
+    code: number;
+    subcode: number;
 
-    readonly meta: U;
+    meta: U;
 
     constructor(message: string = 'Unknown', meta?: U) {
         super(message);
