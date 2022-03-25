@@ -55,16 +55,12 @@ export const define = <T, U = any>(name: T, define: ExceptionDefination<U> = {})
     function CustomException(message: string = defaultMessage, meta: U = defaultMeta): Exception {
         const exception = new Exception(message, meta);
 
+        exception.subcode = subcode;
+
         Object.defineProperties(exception, {
             code: {
                 get() {
                     return code;
-                },
-                configurable: false,
-            },
-            subcode: {
-                get() {
-                    return subcode;
                 },
                 configurable: false,
             },
