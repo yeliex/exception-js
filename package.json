@@ -25,6 +25,7 @@
   },
   "files": [
     "lib",
+    "es",
     "src",
     "index.js",
     "LICENSE",
