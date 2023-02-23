@@ -1,4 +1,4 @@
-import Status = require('http-status');
+import * as Status from 'http-status';
 
 interface ExceptionBaseProps<T = any> {
     code?: number;
