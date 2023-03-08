@@ -15,7 +15,7 @@ export default class Exception<T extends string = 'Exception', U = any> extends 
     code: number;
     subcode: number;
 
-    meta: U;
+    meta?: U;
 
     constructor(message: string = 'Unknown', meta?: U) {
         super(message);
@@ -52,7 +52,7 @@ export const define = <T, U = any>(name: T, define: ExceptionDefination<U> = {})
         meta: defaultMeta,
     } = define;
 
-    function CustomException(message: string = defaultMessage, meta: U = defaultMeta): Exception {
+    function CustomException(message: string = defaultMessage, meta = defaultMeta): Exception {
         const exception = new Exception(message, meta);
 
         exception.subcode = subcode;
