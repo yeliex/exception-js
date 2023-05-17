@@ -2,13 +2,21 @@
   "name": "exception.js",
   "version": "2.0.3",
   "description": "Javascript exception class with ts for both server-side and clients",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./es/index.js",
+      "require": "./lib/index.js",
+      "types": "./src/index.ts"
+    }
+  },
   "scripts": {
-    "clean": "rm -rf lib es",
+    "clean": "rm -rf dist",
     "prebuild": "npm run clean",
     "prepublishOnly": "npm run build",
-    "build": "tsc -p tsconfig.json --target es5",
+    "build": "tsc -p tsconfig.json --module ESNext",
     "test": "mocha -r ts-node/register ./test/**/*.test.ts"
   },
   "files": [
@@ -45,5 +53,8 @@
   },
   "dependencies": {
     "http-status": "^1.6.2"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   }
 }

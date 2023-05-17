@@ -1,4 +1,4 @@
-import { define } from './exception';
+import { define } from './exception.js';
 
 export const Continue = define<'Continue'>('Continue', {
     code: 100,

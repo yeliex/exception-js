@@ -1,6 +1,8 @@
-import Exception from './exception';
+import Exception from './exception.js';
 
-export * from './exception';
-export * from './http-errors';
+export * from './exception.js';
+export * from './http-errors.js';
+
+export { Exception };
 
 export default Exception;
