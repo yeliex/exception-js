@@ -5,13 +5,6 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "type": "module",
-  "exports": {
-    ".": {
-      "import": "./es/index.js",
-      "require": "./lib/index.js",
-      "types": "./src/index.ts"
-    }
-  },
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
