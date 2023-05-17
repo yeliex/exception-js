@@ -20,8 +20,7 @@
     "test": "mocha -r ts-node/register ./test/**/*.test.ts"
   },
   "files": [
-    "lib",
-    "es",
+    "dist",
     "src",
     "index.js",
     "LICENSE",
